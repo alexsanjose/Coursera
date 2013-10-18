@@ -31,8 +31,16 @@ modInverse = function(number, base)
 #   return(z)
 # }
   
-A = rep(NA, times= as.numeric(B))
-x = 1
+# p = 293
+# isprime(293)
+# g = as.bigz(33, p)
+# g^19
+# h = (g^19)
+# B = 2^7
+
+
+
+leftHash = rep(NA, times= as.numeric(B))
 g_x = 1
 
 for(x in 1:as.numeric(B))
@@ -40,24 +48,24 @@ for(x in 1:as.numeric(B))
   g_x = g_x * g
   gInv = modInverse(g_x, p)
   output = (h * gInv) %% p
-  A[x] = as.character(output)
+  modulus(output) = NULL
+  leftHash[x] = as.character(output)
 }
 
+leftHash 
+which(leftHash == "1")
+####
+g_b = g^B
+g_b_x = 1
 
-#   g_x = modPower(g, x, p)
-#   gInv = modInverse(g_x, p)
-#   answer = h * gInv
-#   modulus(answer) = p
-#   A[[x]] = answer
-#   x = x+1
-# }
+for(x in 0:as.numeric(B))
+{
+  g_b_x = g_b_x * g_b
+  output = g_b_x
+  modulus(g_b_x) = NULL
+  as.character(g_b_x)
+  which(leftHash == g_b_x)
+  
+}
 
-x = 1
-g_B = modPower(g, B, p)
-
-modPower(g, B, p)
-
-modPower(3, 4, 5)
-
-while(x < B)
-
+32 + 9 = 41
