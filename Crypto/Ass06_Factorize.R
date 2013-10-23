@@ -100,15 +100,3 @@ q1 = (sqrt_comp + R +1)/2
 as.bigz(p1 * q1) - comp
 Q = (sqrt_comp+1)/2
 A
-
-max = 2 ^ 10
-A = mclapply(1:max, function(i)
-{
-  average = sqrt_comp - i
-  sqr_diff = (average)**2 - comp
-  test = long_division(sqr_diff)
-  answer = comp/ (average - test)
-  if(denominator(answer) == 1) return("Success") else return("failure")
-  
-}, mc.cores = 4, mc.preschedule = F, mc.silent = F)
-
