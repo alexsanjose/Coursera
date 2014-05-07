@@ -15,28 +15,28 @@ modInverse = function(number, base)
   
 }
 
-# modPower = function(number, power, base)
-# {
-#   inBits = intToBits(power)
-#   z = as.bigz(1)
-#   y = as.bigz(number)
-#   modulus(y) = as.bigz(base)
-#   i  = 0
-#   for(i in 0:20)
-#   {
-#     if(inBits[i+1] == 01)
-#       z = z * y
-#     y = (y*y)
-#   }
-#   return(z)
-# }
+modPower = function(number, power, base)
+{
+  inBits = intToBits(power)
+  z = as.bigz(1)
+  y = as.bigz(number)
+  modulus(y) = as.bigz(base)
+  i  = 0
+  for(i in 0:20)
+  {
+    if(inBits[i+1] == 01)
+      z = z * y
+    y = (y*y)
+  }
+  return(z)
+}
   
-# p = 293
-# isprime(293)
-# g = as.bigz(33, p)
-# g^19
-# h = (g^19)
-# B = 2^7
+p = 61
+isprime(61)
+g = as.bigz(59, p)
+g^57
+h = (g^38)
+B = 2^3
 
 
 
@@ -52,20 +52,32 @@ for(x in 1:as.numeric(B))
   leftHash[x] = as.character(output)
 }
 
-leftHash 
-which(leftHash == "1")
+# leftHash 
+
+# load("leftHash.Rdata")
 ####
 g_b = g^B
 g_b_x = 1
 
-for(x in 0:as.numeric(B))
+rightHash = rep(NA, times= as.numeric(B))
+
+for(x in 1:as.numeric(B))
 {
   g_b_x = g_b_x * g_b
-  output = g_b_x
   modulus(g_b_x) = NULL
-  as.character(g_b_x)
-  which(leftHash == g_b_x)
+  output = as.character(g_b_x)
+  rightHash[x] = output
   
 }
 
-32 + 9 = 41
+leftHash
+rightHash
+
+q = which(rightHash %in% leftHash)
+q
+
+q1 = which(leftHash == rightHash[q])
+
+B * q + q1
+
+
