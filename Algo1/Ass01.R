@@ -2,6 +2,7 @@
 
 A = read.csv("http://spark-public.s3.amazonaws.com/algo1/programming_prob/IntegerArray.txt", header = F)
 
+# Multiporpose merge function
 Merge <- function(x, y){
   z = rep(NA, length(x) + length(y))
   i = j = k = 1
