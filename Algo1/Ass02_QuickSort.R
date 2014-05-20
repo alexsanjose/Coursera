@@ -2,6 +2,9 @@
 
 A = read.csv("http://spark-public.s3.amazonaws.com/algo1/programming_prob/QuickSort.txt", header = F)
 Array = A$V1
+
+Comparisons = 0
+
 # Multiporpose merge function
 # Array = c(2, 5, 4, 3, 0, 9, 8, 6, 1, 20,17)
 # Array = c(2,1)
@@ -13,8 +16,23 @@ SwapArray <- function(Array, index1, index2)
   Array
 }
 
+Partition <- function(Array)
+{
+  pivot = Array[1]
+  j = i = 2
+  for(j in 1:length(Array)) 
+  {
+    if(Array[j] < pivot){
+      Array = SwapArray(Array, i , j)
+      i = i + 1
+    }
+  }
+  Array
+  Array = SwapArray(Array, 1, i - 1)
+  return(list(Array = Array, index = i))
+  
+}
 
-Comparisons = 0
 
 QuickSort <- function(Array, type = "first")
 {
@@ -37,25 +55,15 @@ QuickSort <- function(Array, type = "first")
   }
   
   #   message("Array After:", paste(Array, collapse=","))
+  Partitioned = Partition(Array)
+  Array_partitioned = Partitioned$Array
+  i = Partitioned$index
+
   
-  pivot = Array[1]
+  if(i > 2) left_half = QuickSort(Array_partitioned[1:(i-2)], type)
+  if(i <= l) right_half = QuickSort(Array_partitioned[i:l], type)
+  Output = c(left_half, Array[1], right_half)
   
-  j = i = 2
-  for(j in 1:length(Array)) 
-  {
-    if(Array[j] < pivot){
-      Array = SwapArray(Array, i , j)
-      i = i + 1
-    }
-  }
-  Array
-  Array = SwapArray(Array, 1, i - 1)
-  
-  if(i > 2) left_half = QuickSort(Array[1:(i-2)], type)
-  if(i <= l) right_half = QuickSort(Array[i:l], type)
-  Array = c(left_half, pivot, right_half)
-  
-  output = Array
 }
 
 Comparisons = 0
