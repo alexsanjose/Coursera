@@ -154,3 +154,13 @@ FindminCuts <- function(Adj_list)
 }
 
 #### Ass04 ####
+MakeAdjacencyList <- function(array_head, array_tail, node_size)
+{
+  adj_list = lapply(1:node_size, function(x) return(x))
+  
+  i = 1
+  for(i in 1:length(array_tail))
+    adj_list[[array_tail[i]]] = c(adj_list[[array_tail[i]]], array_head[i])
+
+  adj_list
+}

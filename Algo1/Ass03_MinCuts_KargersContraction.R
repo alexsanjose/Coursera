@@ -1,8 +1,6 @@
 ## This Script finds the min cut for a graph using contraction algorithm 
 # install.packages("stringr")
 # install.packages("igraph")
-install.packages("plyr")
-
 library("igraph")
 library("stringr")
 library("plyr")
@@ -19,7 +17,8 @@ test_array = list(c(1, 2, 3, 4),
                   )
 
 
-# A = read.csv("http://spark-public.s3.amazonaws.com/algo1/programming_prob/kargerMinCut.txt", header = F)
+A = read.csv("http://spark-public.s3.amazonaws.com/algo1/programming_prob/kargerMinCut.txt", header = F)
+Array = test_array
 Array = as.character(A$V1)
 
 Adj_list = sapply(Array, strsplit, "\t")
@@ -29,6 +28,7 @@ Adj_list = sapply(Array, strsplit, "\t")
 names(Adj_list) = sapply(Adj_list, function(x) x[[1]])
 Adj_list = sapply(Adj_list, function(x) x[-1])
 
+PlotAdjList(Adj_list)
 ### Plotting
 # test = stack(Adj_list)
 # test1 = graph.data.frame(test)
