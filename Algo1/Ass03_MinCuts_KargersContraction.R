@@ -34,51 +34,6 @@ Adj_list = sapply(Adj_list, function(x) x[-1])
 # test1 = graph.data.frame(test)
 # plot(test1)
 
-### Finding min cuts
-PlotAdjList <- function(Adj_list)
-{
-  test = stack(Adj_list)
-  test1 = graph.data.frame(test)
-  plot(test1)
-}
-
-ContractAdjList <- function(Adj_list, rand_node, rand_edge)
-{
-  target_node = Adj_list[[rand_node]][rand_edge]
-  
-  Adj_list[[rand_node]] = c(Adj_list[[rand_node]], Adj_list[[target_node]])
-
-  Adj_list[[target_node]] = NULL
-  
-  Adj_list = sapply(Adj_list, function(x) 
-  {
-    x[x == target_node] = rand_node
-    x
-  })
-  
-  Adj_list[[rand_node]] = Adj_list[[rand_node]][Adj_list[[rand_node]]!=rand_node] 
-  
-  Adj_list
-}
-
-FindminCuts <- function(Adj_list)
-{
-  Adj_list_dummy = Adj_list
-  Adj_list = Adj_list_dummy
-
-  while(length(Adj_list) > 2)
-  {
-    rand_node = sample(names(Adj_list), 1)
-    rand_edge = sample(1:length(Adj_list[[rand_node]]), 1)
-    Adj_list = ContractAdjList(Adj_list, rand_node, rand_edge)
-  }
-  
-  Adj_list
-#   PlotAdjList(Adj_list)
-#   PlotAdjList(Adj_list_new)
-#   PlotAdjList(test)
-#   
-}
 
 Q = sapply(1:100, function(i)
 {
