@@ -1,22 +1,17 @@
-import sys
 import csv
+import numpy
+# f =  open('/home/alex2/Learning/Data/Algo2/jobs.txt', 'rb')
+f =  open('C:/Users/Alex/Learning/Data/Algo2/jobs.txt', 'rb')
 
-
-
-f =  open('/home/alex2/Learning/Data/Algo2/jobs.txt', 'rb')
 reader = list(csv.reader(f,  delimiter=' '))
 
-total = 0
+jobs_weight = numpy.array([int(reader[i][0]) for i in range(1, len(reader))])
+jobs_length = numpy.array([int(reader[i][1]) for i in range(1, len(reader))])
 
-print len(reader)
+greed = jobs_weight - jobs_length
 
-print range(0, len(reader))
-print reader[2]
+temp = greed.argsort()
+ranks = numpy.empty(len(array), int)
+ranks[temp] = numpy.arange(len(array))
 
-for i in range(1, len(reader)):
-    total = total + int(reader[i][1])
-    
-    
-    
-print(total)
 #print sum(chr.reader[i] for i in [1, 2, 3])
