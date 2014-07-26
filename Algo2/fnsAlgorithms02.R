@@ -1,6 +1,6 @@
 ## This contains all the functions for the Assignments
 
-<<<<<<< HEAD
+
 #### Ass02 ####
 # Convert Matrix to decimal
 toDecimal <- function(clusterData)
@@ -12,9 +12,29 @@ toDecimal <- function(clusterData)
     hash = hash + clusterData[,(i+1)]*(2^i)
   }
   hash
-=======
-#### Ass03 ####
+}
+#
+### Ass03 ####
 # Binary Search Tree
+
+binTree <- function(elements, probs){
+  
+  l = length(elements)
+  i = 1
+  distance = rep(NA, l)
+  for(i in 1:l){
+    
+    left_node = right_node = 0
+    if(i != 1)
+      left_node = binTree(elements[1:(i-1)], probs[1:(i-1)])
+    if(i != l)
+      right_node = binTree(elements[(i+1):l], probs[(i+1):l])
+    
+    distance[i] = left_node + right_node 
+  }
+  min(distance) + sum(probs)
+}
+
 
 
 ## String DIstance
@@ -95,5 +115,4 @@ MatchVectors <- function(string1, string2, gap_score = 1, match_score = 0, sub_s
   
   output = .actualMatch(string1, string2, gap_score, match_score, sub_score)
   
->>>>>>> 24167ade60d7b3c44bac531eb7de5e90cb7ec129
 }
