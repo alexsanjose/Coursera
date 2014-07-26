@@ -36,6 +36,48 @@ binTree <- function(elements, probs){
 }
 
 
+## Ass03 - Knapsack
+knapsack <- function(size, item_value, item_size){
+  dummy_value = item_value
+  dummy_size = item_size
+  
+  item_value = item_value[order(-dummy_size, dummy_value )]
+  item_size = item_size[order(-dummy_size, dummy_value )]
+  
+  knap_vector_prev = rep(0, size)
+  i = 1
+  
+  for(i in 1:length(item_value)){
+    print(i)
+    knap_vector_current = knap_vector_prev
+    for(j in item_size[i]: (size))
+    {
+      if(item_value[i] >= knap_vector_current[j]){
+        knap_vector_current[j] = item_value[i]
+        if(j<size){
+          # next_values = cbind(knap_vector_current[ (j+1):(size)], item_value[i] + knap_vector_prev[ (j-item_size[i] +1): (size-j) ])
+          # knap_vector_current[ (j+1):(size)] = apply(next_values, 1, max)
+          
+          vec1 = knap_vector_current[ (j+1):(size)]
+          vec2 = item_value[i] + knap_vector_prev[ (j-item_size[i] +1): (size-j) ]
+          
+          max_indices = which(vec2<vec1)
+          vec2[max_indices] = vec1[max_indices]
+
+          knap_vector_current[ (j+1):(size)] = vec2
+          
+        }
+        break()
+      }
+    }
+    i = i +1
+    print(tail(knap_vector_current , 1))
+    knap_vector_prev = knap_vector_current 
+    
+  }
+  
+  tail(knap_vector_current, 1)
+}
 
 ## String DIstance
 

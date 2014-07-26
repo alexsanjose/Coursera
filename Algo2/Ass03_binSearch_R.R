@@ -17,5 +17,3 @@ probs = c(0.05, 0.4, 0.08)
 
 
 A = binTree(elements, probs)
-A
-test_matrix = matrix(NA, 7, 7)
