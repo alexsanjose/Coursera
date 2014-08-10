@@ -63,7 +63,7 @@ knapsack <- function(size, item_value, item_size){
           
           max_indices = which(vec2<vec1)
           vec2[max_indices] = vec1[max_indices]
-
+          
           knap_vector_current[ (j+1):(size)] = vec2
           
         }
@@ -100,7 +100,7 @@ knapsack <- function(size, item_value, item_size){
     dist_matrix[l1 +1, l2+1] <<- final_dist
     match_matrix[l1 +1, l2+1] <<- matching
     return(list(matching = matching, dist = final_dist))
-        
+    
   }
   
   if(l1 == 0) 
@@ -132,7 +132,7 @@ knapsack <- function(size, item_value, item_size){
   distances = c(distances_list[[1]]$dist + gap_score, 
                 distances_list[[2]]$dist + as.numeric(!(string1[l1] == string2[l2]))*sub_score,
                 distances_list[[3]]$dist + gap_score
-                )
+  )
   
   min_dist_index = which.min(distances)
   final_dist = distances[min_dist_index]
@@ -164,25 +164,30 @@ ed <- function(x1, x2)
   sqrt(sum((x1[1:2] - x2[1:2])^2))
 }
 
-TST <- function(tspData)
+TST <- function(tspData, set1, set2)
 {
-  tspData$index = 1:nrow(tspData)
+  # A <<- 0
+  # A1 <<- 0
+  
   full_dist <<- hash()
   tspData <- as.matrix(tspData)
-  distances = rep(Inf, nrow(tspData) - 1)
-  i = 2
   
-  for(i in 2:nrow(tspData))
-  {
-    print(i)
-    distances[i-1] = TSP(tspData, i) + ed(tspData[1,], tspData[i,])
-  }
-  min(distances)
+  tspData_first = tspData[set1,]
+  tspData_second = tspData[set2,]
+  
+  distances_first = TSP(tspData_first, nrow(tspData_first))
+  
+  full_dist <<- hash()
+
+  distances_second = TSP(tspData_second, nrow(tspData_second)) 
+  
+  distances_first + distances_second
 }
 
 TSP <- function(tspData, i)
 {
-  id = paste(paste0(tspData[,3], collapse = ""), i, sep = "_")
+  # A <<- A+1
+  id = paste0(c(letters[tspData[,3]], i), collapse = "")
   
   min_dist = full_dist[[id]]
   
@@ -209,6 +214,7 @@ TSP <- function(tspData, i)
   
   min_dist = min(distances)
   full_dist[[id]] <<- min_dist
+  # A1 <<- A1+1
   
   min_dist
   
