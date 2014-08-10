@@ -17,12 +17,11 @@ plot(tspData)
 text(tspData$x, tspData$y, rownames(tspData))
 tspData[,3] = 1:nrow(tspData)
 
-tour = TST(tspData_test, set1 = c(12:1, 13), set2 = c(13:25, 12))
 
+Rprof("test.out")
+tour = TST(tspData_test, set1 = c(12:1, 13), set2 = c(13:25, 12))
 Rprof(NULL)
 summaryRprof("test.out")
 
-A
-A1
 tour
 
