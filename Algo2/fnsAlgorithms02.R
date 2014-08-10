@@ -158,3 +158,60 @@ MatchVectors <- function(string1, string2, gap_score = 1, match_score = 0, sub_s
   output = .actualMatch(string1, string2, gap_score, match_score, sub_score)
   
 }
+
+ed <- function(x1, x2)
+{
+  sqrt(sum((x1 - x2)^2))
+}
+
+TST <- function(tspData)
+{
+  tspData$index = 1:nrow(tspData)
+  full_dist <<- NULL
+  
+  distances = rep(Inf, nrow(tspData) - 1)
+  i = 2
+  for(i in 2:nrow(tspData))
+  {
+    print(i)
+    distances[i-1] = TSP(tspData, i) + ed(tspData[1,], tspData[i,])
+  }
+  min(distances)
+}
+
+TSP <- function(tspData, i)
+{
+  id = paste(paste0(rownames(tspData), collapse = ""), i, sep = "_")
+  
+  min_dist = full_dist[id]
+  if(is.null(min_dist)) min_dist = NA
+  
+  if(!is.na(min_dist)) return(min_dist)
+  
+  # print(id)
+  
+  if(nrow(tspData) == 2){
+    
+    min_dist = ed(tspData[1,], tspData[2,])
+    full_dist[paste(paste0(rownames(tspData), collapse = ""), i, sep = "_")] <<- min_dist
+    
+    return(min_dist)
+    
+  }
+  distances = rep(Inf, nrow(tspData))
+  
+  k = 2
+  tspData_1 = tspData[-i,]
+  for(k in 2:nrow(tspData_1) )
+  {
+    # print(tspData_1)
+    # print(k)
+    distances[k] = TSP(tspData_1, k) + ed(tspData[i,], tspData_1[k,])
+  }
+  
+  min_dist = min(distances)
+  full_dist[id] <<- min_dist
+  
+  min_dist
+  
+}
