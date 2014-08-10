@@ -161,16 +161,17 @@ MatchVectors <- function(string1, string2, gap_score = 1, match_score = 0, sub_s
 
 ed <- function(x1, x2)
 {
-  sqrt(sum((x1 - x2)^2))
+  sqrt(sum((x1[1:2] - x2[1:2])^2))
 }
 
 TST <- function(tspData)
 {
   tspData$index = 1:nrow(tspData)
-  full_dist <<- NULL
-  
+  full_dist <<- hash()
+  tspData <- as.matrix(tspData)
   distances = rep(Inf, nrow(tspData) - 1)
   i = 2
+  
   for(i in 2:nrow(tspData))
   {
     print(i)
@@ -181,19 +182,16 @@ TST <- function(tspData)
 
 TSP <- function(tspData, i)
 {
-  id = paste(paste0(rownames(tspData), collapse = ""), i, sep = "_")
+  id = paste(paste0(tspData[,3], collapse = ""), i, sep = "_")
   
-  min_dist = full_dist[id]
-  if(is.null(min_dist)) min_dist = NA
+  min_dist = full_dist[[id]]
   
-  if(!is.na(min_dist)) return(min_dist)
-  
-  # print(id)
+  if(!is.null(min_dist)) return(min_dist)
   
   if(nrow(tspData) == 2){
     
     min_dist = ed(tspData[1,], tspData[2,])
-    full_dist[paste(paste0(rownames(tspData), collapse = ""), i, sep = "_")] <<- min_dist
+    full_dist[[id]] <<- min_dist
     
     return(min_dist)
     
@@ -210,7 +208,7 @@ TSP <- function(tspData, i)
   }
   
   min_dist = min(distances)
-  full_dist[id] <<- min_dist
+  full_dist[[id]] <<- min_dist
   
   min_dist
   
