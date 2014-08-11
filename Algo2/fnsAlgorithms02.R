@@ -225,11 +225,135 @@ TSP <- function(tspData, i)
 #### Ass04 ####
 MakeAdjacencyList <- function(array_head, array_tail, node_size)
 {
-  adj_list = lapply(1:max(c(array_head, array_tail)), function(x) return(x))
+  adj_list = lapply(1:node_size, function(x) return(x))
   
   i = 1
   for(i in 1:length(array_tail))
     adj_list[[array_tail[i]]] = c(adj_list[[array_tail[i]]], array_head[i])
   
   adj_list
+}
+
+TwoSat_Kosaraju <- function(Array){
+  
+  
+  non_repeat = as.numeric(names(which(table(abs(unique(c(Array$V1, Array$V2)))) == 1)))
+  non_repeat = c(non_repeat, -non_repeat)
+  
+  Array = subset(Array, !(Array$V1 %in% non_repeat | Array$V2 %in% non_repeat))
+  
+  Array_dummy = Array
+  
+  Array$V1 = -Array$V1
+  Array = rbind(Array, cbind(-Array_dummy$V2, Array_dummy$V1))
+  
+  
+  
+  Array = Array * 2
+  Array[Array<0] = -Array[Array<0] - 1
+  
+  
+  revArray = Array[order(Array$V2),]
+  revArray2 = data.frame(revArray$V2, revArray$V1)
+  
+  # plot(graph.data.frame(data.frame(revArray2)))
+  
+  node_size = max(c(revArray$V1, revArray$V2))
+  
+  
+  Adj_list =  MakeAdjacencyList(revArray$V1, revArray$V2, node_size)
+  # Array = Array[!which(Array$V1 == Array$V2),]
+  vertex_check = rep(FALSE, node_size)
+  vertex_fin_time = rep(NA, node_size)
+  vertex_edge_number = rep(2, node_size)
+  
+  vertex_stack = integer()
+  
+  fin_count = 1
+  i = 2
+  
+  message("First Pass")
+  for(i in 1:node_size)
+  {
+    current_element = i
+    
+    if(vertex_check[current_element]) next else
+    {
+      vertex_stack = append(vertex_stack, current_element)
+      vertex_check[current_element] = T
+    }
+    
+    while(length(vertex_stack) != 0)
+    {
+      next_element = Adj_list[[current_element]][vertex_edge_number[[current_element]]]
+      if(is.na(next_element))
+      {
+        vertex_fin_time[current_element] = fin_count
+        fin_count = fin_count + 1
+        # if(fin_count%%10000 == 0) print(fin_count)
+        vertex_stack = vertex_stack[-length(vertex_stack)]
+        current_element = last(vertex_stack)
+      }else
+      {
+        if(vertex_check[next_element]){
+          vertex_edge_number[[current_element]] = vertex_edge_number[[current_element]] + 1
+        }else{
+          current_element = next_element
+          vertex_stack = append(vertex_stack, current_element)
+          vertex_check[current_element] = T
+        }
+      }
+    }
+  }
+  
+  vertex_fin_time_order = order(vertex_fin_time, decreasing=T)
+  
+  Adj_list = MakeAdjacencyList(Array$V2, Array$V1, node_size)
+  
+  vertex_check = rep(FALSE, node_size)
+  vertex_edge_number = rep(2, node_size)
+  
+  SCC = list()
+  k = 1
+  message("Second Pass")
+  for(i in vertex_fin_time_order)
+  {
+    current_SCC = c()
+    # if(k%%10000 == 0) print(k)
+    current_element = i
+    
+    if(vertex_check[current_element]) next else
+    {
+      vertex_stack = append(vertex_stack, current_element)
+      vertex_check[current_element] = T
+      current_SCC = c(current_SCC, current_element)
+    }
+    
+    while(length(vertex_stack) != 0)
+    {
+      next_element = Adj_list[[current_element]][vertex_edge_number[[current_element]]]
+      if(is.na(next_element))
+      {
+        vertex_fin_time[current_element] = fin_count
+        fin_count = fin_count + 1
+        vertex_stack = vertex_stack[-length(vertex_stack)]
+        current_element = last(vertex_stack)
+      }else
+      {
+        if(vertex_check[next_element]){
+          vertex_edge_number[[current_element]] = vertex_edge_number[[current_element]] + 1
+        }else{
+          current_element = next_element
+          vertex_stack = append(vertex_stack, current_element)
+          vertex_check[current_element] = T
+          current_SCC = c(current_SCC, current_element)
+        }
+      }
+    }
+    #   print(current_SCC)
+    k = k + 1
+    if(length(current_SCC)>1)
+      SCC[[length(SCC)+1]] = current_SCC
+  }
+  SCC
 }
