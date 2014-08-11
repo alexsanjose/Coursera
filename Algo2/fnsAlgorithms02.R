@@ -219,3 +219,17 @@ TSP <- function(tspData, i)
   min_dist
   
 }
+
+
+### Kosaraju
+#### Ass04 ####
+MakeAdjacencyList <- function(array_head, array_tail, node_size)
+{
+  adj_list = lapply(1:max(c(array_head, array_tail)), function(x) return(x))
+  
+  i = 1
+  for(i in 1:length(array_tail))
+    adj_list[[array_tail[i]]] = c(adj_list[[array_tail[i]]], array_head[i])
+  
+  adj_list
+}

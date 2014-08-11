@@ -1,14 +1,17 @@
 
 ## This Script tries to solve TSP using dynamic programming
 source("Algo2/fnsAlgorithms02.R")
-library("hash")
+library("data.table")
 
-two_sat = read.table("https://spark-public.s3.amazonaws.com/algo2/datasets/2sat1.txt", sep = " ", skip=1, col.names = c("x", "y"))
+# two_sat = read.table("https://spark-public.s3.amazonaws.com/algo2/datasets/2sat1.txt", sep = " ", skip=1, col.names = c("x", "y"))
 Array = read.table("../Data/Algo2/Ass06/test5.txt", sep = " ", skip=1, col.names = c("V1", "V2"))
 Array = read.table("../Data/Algo2/Ass06/test4.txt", sep = " ", skip=1, col.names = c("V1", "V2"))
 Array = read.table("../Data/Algo2/Ass06/test3.txt", sep = " ", skip=1, col.names = c("V1", "V2"))
-# Array = read.table("../Data/Algo2/Ass06/test2.txt", sep = " ", skip=1, col.names = c("V1", "V2"))
+Array = read.table("../Data/Algo2/Ass06/test2.txt", sep = " ", skip=1, col.names = c("V1", "V2"))
 
+
+Array = Array * 2
+Array[Array<0] = -Array[Array<0] - 1
 
 revArray = Array[order(Array$V2),]
 revArray2 = data.frame(revArray$V2, revArray$V1)
