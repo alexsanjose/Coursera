@@ -16,7 +16,7 @@ nnoremap <C-H> <C-W><C-H>
 map <Esc><Esc> :w<CR>
 
 "NERDTree
-autocmd vimenter * NERDTree
+autocmd vimenter * NERDTree | wincmd p
 
 "set window size
 set lines=60 columns=120
@@ -41,3 +41,12 @@ imap <C-v> <C-r><C-o>+
 "commenting a la RStudio. You have to select in Visual Block mode for this to
 "work
 vmap <C-S-c> I//<Esc>
+
+"Easymotion!
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" Need one more keystroke, but on average, it may be more comfortable.
+nmap s <Plug>(easymotion-s2)
+let g:EasyMotion_smartcase = 1
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
