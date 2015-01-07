@@ -17,4 +17,4 @@ for (i in 1:nrow(table)) {
 table2paint=na.omit(table[, c("lat", "lon", "Sym", "Element")])
 coordinates(table2paint)=~lon+lat
 proj4string(table2paint)=CRS('+proj=longlat +datum=WGS84')
-plotGoogleMaps(table2paint, col="yellow", control.width="0%", control.height="0%", mapTypeId='ROADMAP', legend=FALSE)
+plotGoogleMaps(table2paint, col="yellow", control.width="0%", control.height="0%", mapTypeId='ROADMAP', legend=FALSE)plotGoogleMaps(table2paint, col="yellow", control.width="0%", control.height="0%", mapTypeId='ROADMAP', legend=FALSE)
