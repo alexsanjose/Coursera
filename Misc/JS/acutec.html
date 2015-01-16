@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html; charset=UTF8"> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="libs/d3/d3.js"></script>
+<script type="text/javascript" src="libs/crossfilter/crossfilter.js"></script>
+<script type="text/javascript" src="libs/dc.js/dc.js"></script>
+<link rel="stylesheet" type="text/css" href="libs/dc.js/dc.css" media="screen" /> 
+
+
+<div id="partCount"></div>
+<div id="partInstanceDur"></div>
+
+<script>
+function print_filter(filter){
+  var f=eval(filter);
+  if (typeof(f.length) != "undefined") {}else{}
+  if (typeof(f.top) != "undefined") {f=f.top(Infinity);}else{}
+  if (typeof(f.dimension) != "undefined") {f=f.dimension(function(d) { return "";}).top(Infinity);}else{}
+  console.log(filter+"("+f.length+") = "+JSON.stringify(f).replace("[","[\n\t").replace(/}\,/g,"},\n\t").replace("]","\n]"));
+} 
+
+d3.csv('part_summary.csv', function (error, data) {
+
+    // Fix dates, times, types
+    console.log(data.length)
+    var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S.%L").parse;
+    data.forEach(function (d) {
+      //console.log(d)
+      d.partStart = parseDate(d.partStart);
+      d.partDur = Math.abs(+d.partDur);
+    });
+
+    console.log(data[1].partDur)
+
+    //Setup crossfilter on the data       
+    var ndx = crossfilter(data); 
+
+    // print_filter("data");
+
+    //Define Dimensions
+    //kinds
+    var partKindDim = ndx.dimension(dc.pluck('partKind'));
+    var partCount = partKindDim.group().reduceSum(function(d){return 1;});
+    
+    console.log("Before")
+
+    var partKindDim2 = ndx.dimension(dc.pluck('partKind'));
+
+
+
+    var partDurAvg = partKindDim2.group().reduce(
+      
+
+      function (p, v) {
+
+        ++p.partStartCount;
+        p.total += (+v.partDur);
+        p.avg = Math.round(p.total / p.partStartCount);
+
+        return p;
+      },
+      function (p, v) {
+        --p.partStartCount;
+        p.total -= (+v.partDur);
+        p.avg = (p.partStartCount ==0)? 0: Math.round(p.total / p.partStartCount);
+        //console.log(p)
+
+        //p.avg = p.total / p.partStartCount
+
+        
+        return p;
+      },
+      function () {
+        //console.log("Test");
+        return {partStartCount: 0, total: 0, avg: 0};
+      }
+    );
+
+    console.log("After")
+
+
+
+    //text
+    var partInstanceStart = ndx.dimension(function(d) {return d.partStart;});
+    var partInstanceDuration = partInstanceStart.group().reduceSum(function(d){return d.partDur;});
+
+    //time
+    var dateDim = ndx.dimension(function(d) {return d.partStart;});
+    var dateCount = dateDim.group().reduceSum(function(d){return 1;});
+    var dateDuration = dateDim.group().reduceSum(function(d){return d.duration;});
+
+    var minDate = dateDim.bottom(1500)[1499].partStart;
+    var maxDate = dateDim.top(100)[9].partStart;
+
+    // Define Charts     
+    //var dataTable   = dc.dataTable("#dataTable");
+    var partCount = dc.rowChart("#partCount");
+    var partInstanceDur = dc.rowChart("#partInstanceDur");
+    
+    
+    // partDurations
+    partCount
+    .width(960).height(600)
+    .elasticX(true)
+    .dimension(partKindDim)
+    .group(partKindDim.group())
+    .margins({top: 10, right: 50, bottom: 30, left: 40})
+    ;
+
+    //console.log(partDurAvg)
+
+
+    // partDurations
+    partInstanceDur
+    .width(960).height(600)
+    .elasticX(true)
+    .dimension(partKindDim2)
+    .group(partDurAvg)
+    .valueAccessor(function (p) {
+      return p.value.avg;
+    })
+    .margins({top: 10, right: 50, bottom: 30, left: 40})
+    ;
+
+
+
+    dc.renderAll(); 
+
+    });
+
+
+</script>
+
+
+
+
