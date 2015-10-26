@@ -1,4 +1,3 @@
-
 library("dplyr")
 library("ggplot2")
 library(randomForest)
@@ -29,5 +28,3 @@ summary(A)
 sqrt(sum(   (temp_new$CorebodytemperatureC - mean(temp_new$CorebodytemperatureC))^2))
 sqrt(sum(   (temp_new$CorebodytemperatureC - temp_new$prediction)^2))
 
-
-?rlm
